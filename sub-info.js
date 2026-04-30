@@ -1,6 +1,6 @@
 /**
  * Sub-Info Panel Script for Surge
- * 使用 HEAD 请求获取订阅流量信息，极低流量消耗
+ * 使用 HEAD 请求获取订阅流量信息，极低流量消耗 
  * 
  * [Script]
  * Sub-Info = type=generic,script-path=sub-info.js,timeout=10,argument=https://你的订阅链接
