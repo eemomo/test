@@ -17,11 +17,17 @@ $httpClient.get({ url, headers: { "User-Agent": "Quantumult%2FX" } }, (e, r, bod
   const expStr = expire
     ? new Date(expire * 1000).toISOString().slice(0, 10)
     : "未知";
-  const content = [
-    `📊 已用：${gb(used)} / ${gb(total)} (${pct}%)`,
-    `⬆ 上传：${gb(upload)}　⬇ 下载：${gb(download)}`,
-    `📦 剩余：${gb(left)}`,
-    `⏳ 到期：${expStr}`,
-  ].join("\n");
+const bar = buildBar(pct);
+const content = [
+  `${bar}  ${pct}%`,
+  `━━━━━━━━━━━━━━━━━━`,
+  `📦 总量   ${gb(total)}`,
+  `🔴 已用   ${gb(used)}`,
+  `🟢 剩余   ${gb(left)}`,
+  `⬆️ 上传   ${gb(upload)}`,
+  `⬇️ 下载   ${gb(download)}`,
+  `⏳ 到期   ${expStr}`,
+].join("\n");
+  
   $done({ title: "订阅流量", content });
 });
