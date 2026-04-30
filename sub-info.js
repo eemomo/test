@@ -12,7 +12,7 @@
 const url = $argument;
 
 if (!url) {
-  $done({ title: "订阅流量", content: "⚠️ 未设置订阅地址\n请在 argument 中填写订阅链接" });
+  $done({ title: "", content: "⚠️ 未设置订阅地址\n请在 argument 中填写订阅链接" });
 }
 
 $httpClient.head(
@@ -23,7 +23,7 @@ $httpClient.head(
   },
   (error, response, _body) => {
     if (error) {
-      $done({ title: "订阅流量", content: "❌ 请求失败\n" + error });
+      $done({ title: "", content: "❌ 请求失败\n" + error });
       return;
     }
 
@@ -32,7 +32,7 @@ $httpClient.head(
       || "";
 
     if (!info) {
-      $done({ title: "订阅流量", content: "⚠️ 机场未返回流量信息\n该订阅可能不支持 subscription-userinfo" });
+      $done({ title: "", content: "⚠️ 机场未返回流量信息\n该订阅可能不支持 subscription-userinfo" });
       return;
     }
 
@@ -55,7 +55,6 @@ $httpClient.head(
       return (bytes / 1024).toFixed(2) + " KB";
     };
 
-    // 进度条：10格，已用实心灰，剩余空心灰
     const buildBar = (p) => {
       const filled = Math.min(10, Math.round(p / 10));
       return "◼".repeat(filled) + "◻".repeat(10 - filled);
@@ -72,8 +71,8 @@ $httpClient.head(
       if (daysLeft <= 7) expStr += "  ⚠️";
     }
 
-    const leftStr  = `已用 ${gb(used)}`;
-    const rightStr = `到期 ${expStr}`;
+    const leftStr  = `到期 ${expStr}`;
+    const rightStr = `已用 ${gb(used)}`;
     const middle   = " ".repeat(8);
 
     const content = [
@@ -81,6 +80,6 @@ $httpClient.head(
       `${leftStr}${middle}${rightStr}`,
     ].join("\n");
 
-    $done({ title: "订阅流量", content });
+    $done({ title: "", content });
   }
 );
