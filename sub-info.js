@@ -47,7 +47,6 @@ $httpClient.head(
     const expire   = get("expire");
 
     const used = upload + download;
-    const left = total - used;
     const pct  = total ? (used / total * 100) : 0;
 
     const gb = (bytes) => {
@@ -56,34 +55,30 @@ $httpClient.head(
       return (bytes / 1024).toFixed(2) + " KB";
     };
 
-    // 进度条：10格，每格代表 10%
+    // 进度条：10格，已用实心灰，剩余空心灰
     const buildBar = (p) => {
       const filled = Math.min(10, Math.round(p / 10));
-      return "🟦".repeat(filled) + "⬜".repeat(10 - filled);
+      return "◼".repeat(filled) + "◻".repeat(10 - filled);
     };
 
     const bar = buildBar(pct);
     const pctStr = pct.toFixed(1) + "%";
 
     let expStr = "未知";
-    let expWarning = "";
     if (expire) {
       const expDate = new Date(expire * 1000);
       expStr = expDate.toISOString().slice(0, 10);
       const daysLeft = Math.ceil((expDate - Date.now()) / 86400000);
-      if (daysLeft <= 7)       expWarning = "  ⚠️ 即将到期";
-      else if (daysLeft <= 30) expWarning = "  · 剩 " + daysLeft + " 天";
+      if (daysLeft <= 7) expStr += "  ⚠️";
     }
+
+    const leftStr  = `已用 ${gb(used)}`;
+    const rightStr = `到期 ${expStr}`;
+    const middle   = " ".repeat(8);
 
     const content = [
       `${bar}  ${pctStr}`,
-      `━━━━━━━━━━━━━━━━━━`,
-      `📦 总量    ${gb(total)}`,
-      `🔴 已用    ${gb(used)}`,
-      `🟢 剩余    ${gb(left)}`,
-      `⬆️ 上传    ${gb(upload)}`,
-      `⬇️ 下载    ${gb(download)}`,
-      `⏳ 到期    ${expStr}${expWarning}`,
+      `${leftStr}${middle}${rightStr}`,
     ].join("\n");
 
     $done({ title: "订阅流量", content });
